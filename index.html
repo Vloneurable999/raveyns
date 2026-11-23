@@ -204,25 +204,32 @@
       <div id="socialsGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-3.5"></div>
     </section>
 
-    <!-- 5. RECENT MUSIC UPLOADS SECTION -->
+    <!-- 5. RECENT MUSIC UPLOADS SECTION (SPOTIFY EMBED) -->
     <section id="uploads" class="scroll-mt-24">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 px-1">
+      <div class="flex items-center justify-between gap-3 mb-4 px-1">
         <div>
           <h2 class="font-mono text-xs uppercase tracking-[0.22em] text-fuchsia-300/80 flex items-center gap-2">
             <span class="text-fuchsia-400">✦</span> Recent Music Uploads
           </h2>
           <p class="text-xs text-zinc-500 mt-1">Latest singles, demos &amp; drops</p>
         </div>
-
-        <!-- Category Filter Pills -->
-        <div id="uploadFilters" class="flex flex-wrap items-center gap-1.5" role="group" aria-label="Filter uploads by type">
-          <!-- Filter buttons injected by script -->
-        </div>
+        <span class="font-mono text-[11px] text-zinc-500">Spotify</span>
       </div>
 
-      <!-- Responsive Tracks Grid -->
-      <div id="uploadsGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <!-- Track cards injected by script -->
+      <!-- Glassmorphic Container for Spotify Artist Embed -->
+      <div class="relative overflow-hidden rounded-3xl bg-white/[0.03] backdrop-blur-xl border border-white/10 p-3 sm:p-4 shadow-xl shadow-black/40 hover:border-fuchsia-500/35 transition-colors">
+        <iframe
+          data-testid="embed-iframe"
+          style="border-radius:12px"
+          src="https://open.spotify.com/embed/artist/4TQ0jOKwGZFjmSnqR27MvF?utm_source=generator&theme=0&si=e2dd050012244af6"
+          width="100%"
+          height="352"
+          frameBorder="0"
+          allowfullscreen=""
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+          loading="lazy"
+          title="raveyn on Spotify">
+        </iframe>
       </div>
     </section>
 
@@ -342,72 +349,6 @@
       ],
     };
 
-    /**
-     * RECENT MUSIC UPLOADS
-     * Add, remove, or edit tracks below. Set coverUrl to a local image path (e.g., "./cover.jpg")
-     * or leave it as "" to use the Y2K gradient artwork.
-     */
-    const RECENT_UPLOADS = [
-      {
-        title: "Vanished",
-        type: "Singles",
-        year: "2026",
-        duration: "2:44",
-        tag: "New",
-        gradient: "from-purple-600/80 via-fuchsia-600/60 to-pink-500/80",
-        coverUrl: "",
-        links: {
-          spotify: "https://open.spotify.com/artist/4TQ0jOKwGZFjmSnqR27MvF",
-          soundcloud: "https://soundcloud.com/itsraveyn",
-          apple: "https://music.apple.com/us/artist/raveyn/1851112747",
-        },
-      },
-      {
-        title: "destroyed",
-        type: "Singles",
-        year: "2026",
-        duration: "2:19",
-        tag: "Single",
-        gradient: "from-fuchsia-700/80 via-purple-700/60 to-indigo-600/80",
-        coverUrl: "",
-        links: {
-          spotify: "https://open.spotify.com/artist/4TQ0jOKwGZFjmSnqR27MvF",
-          soundcloud: "https://soundcloud.com/itsraveyn",
-          apple: "https://music.apple.com/us/artist/raveyn/1851112747",
-        },
-      },
-      {
-        title: "thorns",
-        type: "Collabs",
-        year: "2026",
-        duration: "3:05",
-        tag: "Collab",
-        gradient: "from-pink-600/80 via-fuchsia-600/60 to-purple-700/80",
-        coverUrl: "",
-        links: {
-          spotify: "https://open.spotify.com/artist/4TQ0jOKwGZFjmSnqR27MvF",
-          soundcloud: "https://soundcloud.com/itsraveyn",
-          apple: "https://music.apple.com/us/artist/raveyn/1851112747",
-        },
-      },
-      {
-        title: "Flashbacks",
-        type: "Singles",
-        year: "2025",
-        duration: "2:51",
-        tag: "Archive",
-        gradient: "from-indigo-600/80 via-purple-600/60 to-pink-500/80",
-        coverUrl: "",
-        links: {
-          spotify: "https://open.spotify.com/artist/4TQ0jOKwGZFjmSnqR27MvF",
-          soundcloud: "https://soundcloud.com/itsraveyn",
-          apple: "https://music.apple.com/us/artist/raveyn/1851112747",
-        },
-      },
-    ];
-
-    let allUploads = [...RECENT_UPLOADS];
-    let activeFilter = "All";
     let toastTimeout = null;
 
     /**
@@ -545,183 +486,6 @@
     }
 
     /**
-     * Renders filter buttons (All, Singles, Collabs).
-     */
-    function renderUploadFilters() {
-      const container = document.getElementById("uploadFilters");
-      if (!container) return;
-
-      const defaultTypes = ["All", "Singles", "Collabs"];
-      const dynamicTypes = allUploads.map((track) => track.type).filter(Boolean);
-      const types = [...new Set([...defaultTypes, ...dynamicTypes])];
-
-      container.innerHTML = types
-        .map((type) => {
-          const isActive = type === activeFilter;
-          const activeClasses = isActive
-            ? "bg-fuchsia-500/20 text-fuchsia-200 border-fuchsia-400/50"
-            : "bg-white/[0.03] text-zinc-400 border-white/10 hover:text-zinc-200 hover:bg-white/[0.06]";
-          return `
-            <button
-              type="button"
-              data-filter="${type}"
-              class="px-3 py-1.5 rounded-xl text-xs font-medium border transition-all cursor-pointer ${activeClasses}"
-            >
-              ${type}
-            </button>
-          `;
-        })
-        .join("");
-
-      container.querySelectorAll("button[data-filter]").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          activeFilter = btn.getAttribute("data-filter");
-          renderUploadFilters();
-          renderUploads();
-        });
-      });
-    }
-
-    /**
-     * Renders the Recent Music Uploads responsive grid.
-     */
-    function renderUploads() {
-      const container = document.getElementById("uploadsGrid");
-      if (!container) return;
-
-      const filtered =
-        activeFilter === "All"
-          ? allUploads
-          : allUploads.filter((track) => track.type === activeFilter);
-
-      if (filtered.length === 0) {
-        container.innerHTML = `
-          <div class="sm:col-span-2 p-8 rounded-2xl bg-white/[0.02] border border-white/10 text-center text-sm text-zinc-400">
-            No uploads found in this category yet.
-          </div>
-        `;
-        return;
-      }
-
-      container.innerHTML = filtered
-        .map((track) => {
-          const fallbackArt = `https://placehold.co/300x300/1a0b2e/f0abfc?text=${encodeURIComponent(track.title)}`;
-          const artworkMarkup = track.coverUrl
-            ? `<img src="${track.coverUrl}" alt="${track.title} cover art" onerror="this.onerror=null;this.src='${fallbackArt}';" class="w-full h-full object-cover" />`
-            : `
-              <div class="w-full h-full bg-gradient-to-br ${track.gradient || "from-purple-600/80 via-fuchsia-600/60 to-pink-500/80"} flex items-center justify-center relative">
-                <!-- Subtle Y2K chrome star watermark -->
-                <svg class="w-10 h-10 text-white/25 group-hover:scale-110 group-hover:rotate-12 transition-transform duration-500" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                  <path d="M12 1L14.5 9.5L23 12L14.5 14.5L12 23L9.5 14.5L1 12L9.5 9.5L12 1Z" />
-                </svg>
-                <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.22),transparent_55%)]"></div>
-              </div>
-            `;
-
-          const spotifyUrl = track.links?.spotify || "https://open.spotify.com/artist/4TQ0jOKwGZFjmSnqR27MvF";
-          const soundcloudUrl = track.links?.soundcloud || "https://soundcloud.com/itsraveyn";
-          const appleUrl = track.links?.apple || "https://music.apple.com/us/artist/raveyn/1851112747";
-          const primaryUrl = track.listenUrl || spotifyUrl;
-
-          return `
-            <article class="group relative flex items-center gap-4 p-4 rounded-2xl bg-white/[0.03] backdrop-blur-xl border border-white/10 hover:border-fuchsia-400/45 hover:bg-white/[0.05] hover:shadow-neon-purple transition-all duration-300">
-              <!-- Square Cover Art Thumbnail -->
-              <div class="relative flex-shrink-0 w-20 h-20 sm:w-24 sm:h-24 rounded-xl overflow-hidden border border-white/15 shadow-lg shadow-black/40">
-                ${artworkMarkup}
-                <!-- Hover Play Indicator -->
-                <a
-                  href="${primaryUrl}"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Play ${track.title}"
-                  class="absolute inset-0 bg-black/35 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity"
-                >
-                  <span class="w-9 h-9 rounded-full bg-fuchsia-500/90 text-white flex items-center justify-center shadow-lg">
-                    <svg class="w-4 h-4 ml-0.5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                      <polygon points="5 3 19 12 5 21 5 3"></polygon>
-                    </svg>
-                  </span>
-                </a>
-              </div>
-
-              <!-- Track Metadata & Multi-Platform Links -->
-              <div class="flex-1 min-w-0">
-                <div class="flex items-center justify-between gap-2 mb-1">
-                  <div class="flex items-center gap-2 flex-wrap">
-                    <span class="px-2 py-0.5 rounded-md text-[10px] font-mono uppercase tracking-wider text-fuchsia-200 bg-fuchsia-500/15 border border-fuchsia-400/25">
-                      ${track.tag}
-                    </span>
-                    <span class="text-[11px] font-mono text-zinc-500">
-                      ${track.type} &middot; ${track.year}
-                    </span>
-                  </div>
-                  <span class="text-[11px] font-mono text-zinc-500 flex-shrink-0">${track.duration}</span>
-                </div>
-
-                <h3 class="text-base sm:text-lg font-bold text-white truncate group-hover:text-fuchsia-200 transition-colors">
-                  ${track.title}
-                </h3>
-
-                <!-- Platform Quick-Link Pills -->
-                <div class="mt-2.5 flex flex-wrap items-center gap-1.5">
-                  <a
-                    href="${spotifyUrl}"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="px-2.5 py-1 rounded-lg text-[11px] font-medium text-fuchsia-200 bg-purple-500/15 border border-purple-400/25 hover:bg-purple-500/30 hover:border-purple-400/50 transition-colors"
-                  >
-                    Spotify
-                  </a>
-                  <a
-                    href="${soundcloudUrl}"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="px-2.5 py-1 rounded-lg text-[11px] font-medium text-pink-200 bg-pink-500/15 border border-pink-400/25 hover:bg-pink-500/30 hover:border-pink-400/50 transition-colors"
-                  >
-                    SoundCloud
-                  </a>
-                  <a
-                    href="${appleUrl}"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="px-2.5 py-1 rounded-lg text-[11px] font-medium text-zinc-200 bg-white/[0.06] border border-white/15 hover:bg-white/[0.14] hover:border-fuchsia-400/40 transition-colors"
-                  >
-                    Apple Music
-                  </a>
-                </div>
-              </div>
-            </article>
-          `;
-        })
-        .join("");
-    }
-
-    /**
-     * Optional Future Railway Backend Loader
-     * If RAILWAY_API_URL is configured, fetches live uploads with graceful fallback
-     * to the local RECENT_UPLOADS array if the API is offline or unreachable.
-     */
-    async function loadUploadsFromRailway() {
-      if (!RAILWAY_API_URL) return;
-
-      try {
-        const response = await fetch(RAILWAY_API_URL, {
-          headers: { Accept: "application/json" },
-        });
-        if (!response.ok) throw new Error("Railway API returned non-OK status");
-
-        const data = await response.json();
-        if (Array.isArray(data) && data.length > 0) {
-          allUploads = data;
-          renderUploadFilters();
-          renderUploads();
-        }
-      } catch (error) {
-        console.warn("Using local RECENT_UPLOADS fallback:", error.message);
-      }
-    }
-
-    /**
      * Initialize Application on DOM Ready
      */
     document.addEventListener("DOMContentLoaded", () => {
@@ -735,9 +499,6 @@
         renderArtistAvatar();
         renderMusicPlatforms();
         renderSocials();
-        renderUploadFilters();
-        renderUploads();
-        loadUploadsFromRailway();
       } catch (error) {
         console.error("Initialization error:", error);
       }
