@@ -98,9 +98,9 @@
       <!-- Subtle top gradient hairline -->
       <div aria-hidden="true" class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-fuchsia-400/60 to-transparent"></div>
 
-      <!-- Stylized Y2K Chrome / Neon Emblem -->
+      <!-- Stylized Y2K Chrome / Neon Emblem / Profile Photo -->
       <div class="relative mx-auto mb-5 w-24 h-24 sm:w-28 sm:h-28 rounded-3xl p-[2px] bg-gradient-to-br from-purple-500 via-fuchsia-400 to-pink-500 shadow-neon-purple">
-        <div class="w-full h-full rounded-[22px] bg-[#0b0714] flex items-center justify-center relative overflow-hidden">
+        <div id="artistAvatarContainer" class="w-full h-full rounded-[22px] bg-[#0b0714] flex items-center justify-center relative overflow-hidden">
           <!-- Decorative vinyl/orbit rings -->
           <div class="absolute inset-2 rounded-full border border-fuchsia-400/20"></div>
           <div class="absolute inset-5 rounded-full border border-purple-400/20"></div>
@@ -260,6 +260,14 @@
        ========================================================================= -->
   <script>
     /**
+     * ARTIST PROFILE PHOTO
+     * Upload a photo (e.g., "pfp.jpg" or "avatar.png") to your GitHub repo's root folder
+     * and set this to "./pfp.jpg", OR paste any direct image URL.
+     * Leave as "" to keep the default "rv" Y2K emblem.
+     */
+    const ARTIST_AVATAR_URL = "./pfp.jpg";
+
+    /**
      * OPTIONAL RAILWAY BACKEND ENDPOINT
      * When you're ready to serve tracks dynamically from Railway (e.g., Node/Express,
      * FastAPI, or PostgreSQL on Railway), paste your endpoint URL below.
@@ -268,82 +276,8 @@
     const RAILWAY_API_URL = ""; // Example: "https://raveyn-api.up.railway.app/api/uploads"
 
     /**
-     * RECENT MUSIC UPLOADS
-     * Edit this array anytime to add, remove, or reorder tracks.
-     * - type: "Singles" or "Collabs" (matches the filter tabs)
-     * - coverUrl: Leave "" to use the built-in Y2K purple/pink gradient artwork,
-     *             or paste an image URL (with automatic fallback if it fails to load).
-     */
-    const RECENT_UPLOADS = [
-      {
-        id: "vanished",
-        title: "Vanished",
-        type: "Singles",
-        tag: "NEW RELEASE",
-        year: "2026",
-        duration: "2:44",
-        listenUrl: "https://open.spotify.com/artist/4TQ0jOKwGZFjmSnqR27MvF",
-        links: {
-          spotify: "https://open.spotify.com/artist/4TQ0jOKwGZFjmSnqR27MvF",
-          soundcloud: "https://soundcloud.com/itsraveyn",
-          apple: "https://music.apple.com/us/artist/raveyn/1851112747",
-        },
-        coverUrl: "",
-        gradient: "from-purple-600/80 via-fuchsia-600/60 to-pink-500/80",
-      },
-      {
-        id: "destroyed",
-        title: "destroyed",
-        type: "Singles",
-        tag: "OUT NOW",
-        year: "2026",
-        duration: "2:19",
-        listenUrl: "https://soundcloud.com/itsraveyn",
-        links: {
-          spotify: "https://open.spotify.com/artist/4TQ0jOKwGZFjmSnqR27MvF",
-          soundcloud: "https://soundcloud.com/itsraveyn",
-          apple: "https://music.apple.com/us/artist/raveyn/1851112747",
-        },
-        coverUrl: "",
-        gradient: "from-fuchsia-700/80 via-purple-800/70 to-indigo-900/90",
-      },
-      {
-        id: "thorns",
-        title: "thorns",
-        type: "Collabs",
-        tag: "FEATURED",
-        year: "2025",
-        duration: "3:02",
-        listenUrl: "https://music.apple.com/us/artist/raveyn/1851112747",
-        links: {
-          spotify: "https://open.spotify.com/artist/4TQ0jOKwGZFjmSnqR27MvF",
-          soundcloud: "https://soundcloud.com/itsraveyn",
-          apple: "https://music.apple.com/us/artist/raveyn/1851112747",
-        },
-        coverUrl: "",
-        gradient: "from-pink-600/80 via-rose-600/60 to-purple-800/80",
-      },
-      {
-        id: "flashbacks",
-        title: "Flashbacks",
-        type: "Collabs",
-        tag: "ARCHIVE",
-        year: "2025",
-        duration: "2:35",
-        listenUrl: "https://soundcloud.com/itsraveyn",
-        links: {
-          spotify: "https://open.spotify.com/artist/4TQ0jOKwGZFjmSnqR27MvF",
-          soundcloud: "https://soundcloud.com/itsraveyn",
-          apple: "https://music.apple.com/us/artist/raveyn/1851112747",
-        },
-        coverUrl: "",
-        gradient: "from-violet-600/80 via-fuchsia-500/60 to-pink-600/80",
-      },
-    ];
-
-    /**
-     * MUSIC PLATFORMS & SOCIALS
-     * All official artist profile links for raveyn.
+     * ARTIST LINKS CONFIGURATION
+     * Edit your streaming platforms and social channels here.
      */
     const ARTIST_CONFIG = {
       musicPlatforms: [
@@ -351,25 +285,25 @@
           name: "Spotify",
           subtitle: "@raveyn",
           url: "https://open.spotify.com/artist/4TQ0jOKwGZFjmSnqR27MvF",
-          accent: "group-hover:border-fuchsia-400/50 group-hover:shadow-neon-purple",
-          iconBg: "from-purple-500/20 to-fuchsia-500/20 text-fuchsia-300",
-          icon: `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.372 0 0 5.372 0 12s5.372 12 12 12 12-5.372 12-12S18.628 0 12 0zm5.508 17.302a.748.748 0 0 1-1.03.248c-2.82-1.723-6.371-2.112-10.553-1.157a.75.75 0 1 1-.334-1.462c4.576-1.046 8.5-.596 11.669 1.341a.75.75 0 0 1 .248 1.03zm1.47-3.27a.937.937 0 0 1-1.288.308c-3.228-1.984-8.15-2.559-11.969-1.4a.938.938 0 1 1-.545-1.795c4.362-1.324 9.784-.683 13.494 1.599a.937.937 0 0 1 .308 1.288zm.126-3.404C15.232 8.33 8.842 8.118 5.146 9.24a1.124 1.124 0 1 1-.653-2.152c4.244-1.288 11.302-1.039 15.758 1.606a1.124 1.124 0 0 1-1.147 1.934z"/></svg>`,
+          accent: "hover:border-purple-400/50 hover:shadow-neon-purple",
+          iconBg: "from-purple-500/25 to-fuchsia-500/20 text-purple-300",
+          icon: `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.72 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>`,
         },
         {
           name: "SoundCloud",
           subtitle: "@itsraveyn",
           url: "https://soundcloud.com/itsraveyn",
-          accent: "group-hover:border-pink-400/50 group-hover:shadow-neon-pink",
-          iconBg: "from-pink-500/20 to-purple-500/20 text-pink-300",
-          icon: `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M11.56 8.87V17h8.76c1.48 0 2.68-1.2 2.68-2.68 0-1.35-.99-2.46-2.29-2.65a4.21 4.21 0 0 0-4.16-3.59c-.66 0-1.29.15-1.85.43a4.97 4.97 0 0 0-3.14.36zM9.67 9.6v7.4h1.18V9.26c-.41.09-.8.21-1.18.34zm-1.89 1.07V17h1.18v-6.98c-.42.19-.81.41-1.18.65zm-1.89 1.72V17h1.18v-5.76c-.44.36-.84.74-1.18 1.15zM4 14.33V17h1.18v-3.8c-.46.33-.86.71-1.18 1.13zm-1.89.91c-.07.25-.11.51-.11.78 0 .35.07.68.2.98h1.09v-2.47c-.5.14-.93.38-1.18.71z"/></svg>`,
+          accent: "hover:border-pink-400/50 hover:shadow-neon-pink",
+          iconBg: "from-pink-500/25 to-fuchsia-500/20 text-pink-300",
+          icon: `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M1.175 12.225c-.051 0-.094.046-.101.1l-.233 2.154.233 2.105c.007.058.05.098.101.098.05 0 .09-.04.099-.098l.255-2.105-.27-2.154c-.009-.06-.052-.1-.084-.1zm-.899.828c-.06 0-.091.037-.104.094L0 14.479l.165 1.308c.014.057.045.094.09.094s.089-.037.099-.094l.19-1.308-.19-1.334c-.01-.057-.054-.094-.078-.094zm1.83-1.229c-.061 0-.12.045-.12.104l-.21 2.563.225 2.458c0 .06.045.104.106.104.061 0 .12-.044.12-.104l.24-2.458-.24-2.563c0-.06-.06-.104-.12-.104zm.945-.089c-.075 0-.135.06-.15.135l-.193 2.64.21 2.544c.016.077.075.138.149.138.075 0 .135-.061.15-.15l.24-2.532-.24-2.623c0-.075-.06-.152-.166-.152zm1.155-.36c-.005-.09-.075-.149-.159-.149-.09 0-.158.06-.164.149l-.217 2.992.2 2.563c.014.09.075.15.164.15.084 0 .154-.06.159-.15l.24-2.563-.223-2.992zm1.066-.42c-.015-.09-.09-.164-.18-.164-.09 0-.165.074-.18.164l-.195 3.412.195 2.563c.015.09.09.165.18.165.09 0 .165-.075.18-.165l.225-2.563-.225-3.412zm1.08-.465c-.015-.105-.09-.18-.195-.18-.105 0-.18.075-.195.18l-.18 3.877.18 2.563c.015.105.09.18.195.18.105 0 .18-.075.195-.18l.21-2.563-.21-3.877zm1.095-.42c-.015-.105-.105-.195-.21-.195-.105 0-.195.09-.21.195l-.165 4.297.165 2.563c.015.105.105.195.21.195.105 0 .195-.09.21-.195l.195-2.563-.195-4.297zm1.11-.255c-.015-.12-.105-.21-.225-.21-.12 0-.21.09-.225.21l-.15 4.552.15 2.563c.015.12.105.21.225.21.12 0 .21-.09.225-.21l.18-2.563-.18-4.552zm1.125-.12c-.015-.12-.12-.225-.24-.225-.12 0-.225.105-.24.225l-.135 4.672.135 2.563c.015.12.12.225.24.225.12 0 .225-.105.24-.225l.165-2.563-.165-4.672zm1.14-.06c-.015-.135-.12-.24-.255-.24-.135 0-.24.105-.255.24l-.12 4.732.12 2.563c.015.135.12.24.255.24.135 0 .24-.105.255-.24l.15-2.563-.15-4.732zm1.56-1.44c-.54 0-1.05.12-1.515.33-.15.06-.225.195-.225.345v6.84c0 .165.135.3.3.3h9.66c1.695 0 3.075-1.38 3.075-3.075 0-1.695-1.38-3.075-3.075-3.075-.42 0-.81.09-1.17.24-.345-2.205-2.25-3.9-4.545-3.9h-.505z"/></svg>`,
         },
         {
           name: "Apple Music",
           subtitle: "@Raveyn",
           url: "https://music.apple.com/us/artist/raveyn/1851112747",
-          accent: "group-hover:border-purple-400/50 group-hover:shadow-neon-purple",
-          iconBg: "from-fuchsia-500/20 to-rose-500/20 text-fuchsia-200",
-          icon: `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.45 2.13a1.25 1.25 0 0 0-1.08-.1l-11 3.3A1.25 1.25 0 0 0 8.5 6.53v9.63a3.75 3.75 0 1 0 1.75 3.17V10.1l9.5-2.85v6.41a3.75 3.75 0 1 0 1.75 3.17V3.25c0-.43-.22-.84-.55-1.12z"/></svg>`,
+          accent: "hover:border-fuchsia-400/50 hover:shadow-neon-pink",
+          iconBg: "from-fuchsia-500/25 to-pink-500/20 text-fuchsia-300",
+          icon: `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.994 6.124a9.23 9.23 0 00-.24-2.19c-.317-1.31-1.062-2.31-2.18-3.043a5.022 5.022 0 00-1.877-.726 10.496 10.496 0 00-1.564-.15c-.04-.003-.083-.01-.124-.013H5.986c-.152.01-.303.017-.455.026-.747.043-1.49.123-2.193.4-1.336.53-2.3 1.452-2.865 2.78-.192.448-.292.925-.363 1.408-.056.392-.088.785-.1 1.18 0 .032-.007.062-.01.093v12.223c.01.14.017.283.027.424.05.815.154 1.624.497 2.373.65 1.42 1.738 2.353 3.234 2.801.42.127.856.187 1.293.228.555.053 1.11.06 1.667.06h11.03a12.5 12.5 0 001.57-.1c.822-.106 1.596-.35 2.295-.81a5.046 5.046 0 001.88-2.207c.186-.42.293-.87.37-1.324.113-.675.138-1.358.137-2.04-.002-3.8 0-7.595-.003-11.393zm-6.423 3.99v5.712c0 .417-.058.827-.244 1.206-.29.59-.76.962-1.388 1.14-.35.1-.706.157-1.07.173-.95.045-1.773-.6-1.943-1.536a1.88 1.88 0 011.038-2.022c.323-.16.67-.25 1.018-.324.378-.082.758-.153 1.134-.24.274-.063.457-.23.51-.516a.904.904 0 00.02-.193c0-1.815 0-3.63-.002-5.443a.725.725 0 00-.026-.185c-.04-.15-.15-.243-.304-.234-.16.01-.318.035-.475.066-.76.15-1.52.303-2.28.456l-2.325.47-1.374.278c-.016.003-.032.01-.048.013-.277.077-.377.203-.39.49-.002.042 0 .086 0 .13-.002 2.602 0 5.204-.003 7.805 0 .42-.047.836-.215 1.227-.278.64-.77 1.04-1.434 1.233-.35.1-.71.16-1.075.172-.96.036-1.755-.6-1.92-1.544-.14-.812.23-1.685 1.154-2.075.357-.15.73-.232 1.108-.31.287-.06.575-.116.86-.177.383-.083.583-.323.6-.714v-.15c0-2.96 0-5.922.002-8.882 0-.123.013-.25.042-.37.07-.285.273-.448.558-.508.288-.06.577-.118.867-.175l2.337-.47 2.38-.48c.507-.102 1.015-.203 1.524-.304.22-.044.442-.08.665-.067.35.02.596.26.628.613.01.105.012.21.012.315v1.696z"/></svg>`,
         },
       ],
       socials: [
@@ -377,76 +311,163 @@
           name: "Instagram",
           handle: "@itsraveyn",
           url: "https://www.instagram.com/itsraveyn",
-          accent: "group-hover:border-pink-400/50 group-hover:shadow-neon-pink",
-          iconBg: "from-pink-500/20 to-fuchsia-500/20 text-pink-300",
-          icon: `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>`,
+          accent: "hover:border-pink-400/50 hover:shadow-neon-pink",
+          iconBg: "from-pink-500/25 to-purple-500/20 text-pink-300",
+          icon: `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>`,
         },
         {
           name: "TikTok",
           handle: "@itsraveyn",
           url: "https://www.tiktok.com/@itsraveyn",
-          accent: "group-hover:border-fuchsia-400/50 group-hover:shadow-neon-purple",
-          iconBg: "from-purple-500/20 to-pink-500/20 text-fuchsia-300",
-          icon: `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64c.298-.002.595.042.88.13V9.4a6.33 6.33 0 0 0-1-.08A6.34 6.34 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1.04-.1z"/></svg>`,
+          accent: "hover:border-fuchsia-400/50 hover:shadow-neon-purple",
+          iconBg: "from-fuchsia-500/25 to-purple-500/20 text-fuchsia-300",
+          icon: `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/></svg>`,
         },
         {
           name: "Threads",
           handle: "@itsraveyn",
           url: "https://www.threads.com/@itsraveyn",
-          accent: "group-hover:border-purple-400/50 group-hover:shadow-neon-purple",
-          iconBg: "from-violet-500/20 to-fuchsia-500/20 text-purple-200",
-          icon: `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12a7 7 0 1 0-3.2 5.9"></path><path d="M16 12v1.5a2.5 2.5 0 0 0 5 0V12a9 9 0 1 0-4 7.46"></path><circle cx="12" cy="12" r="3"></circle></svg>`,
+          accent: "hover:border-purple-400/50 hover:shadow-neon-purple",
+          iconBg: "from-purple-500/25 to-indigo-500/20 text-purple-300",
+          icon: `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94"></path></svg>`,
         },
         {
           name: "YouTube",
           handle: "@raveyn",
           url: "https://www.youtube.com/@raveyn",
-          accent: "group-hover:border-pink-400/50 group-hover:shadow-neon-pink",
-          iconBg: "from-rose-500/20 to-pink-500/20 text-pink-300",
+          accent: "hover:border-pink-400/50 hover:shadow-neon-pink",
+          iconBg: "from-pink-500/25 to-rose-500/20 text-pink-300",
           icon: `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>`,
         },
       ],
     };
 
-    // Active state for uploads & filters
+    /**
+     * RECENT MUSIC UPLOADS
+     * Add, remove, or edit tracks below. Set coverUrl to a local image path (e.g., "./cover.jpg")
+     * or leave it as "" to use the Y2K gradient artwork.
+     */
+    const RECENT_UPLOADS = [
+      {
+        title: "Vanished",
+        type: "Singles",
+        year: "2026",
+        duration: "2:44",
+        tag: "New",
+        gradient: "from-purple-600/80 via-fuchsia-600/60 to-pink-500/80",
+        coverUrl: "",
+        links: {
+          spotify: "https://open.spotify.com/artist/4TQ0jOKwGZFjmSnqR27MvF",
+          soundcloud: "https://soundcloud.com/itsraveyn",
+          apple: "https://music.apple.com/us/artist/raveyn/1851112747",
+        },
+      },
+      {
+        title: "destroyed",
+        type: "Singles",
+        year: "2026",
+        duration: "2:19",
+        tag: "Single",
+        gradient: "from-fuchsia-700/80 via-purple-700/60 to-indigo-600/80",
+        coverUrl: "",
+        links: {
+          spotify: "https://open.spotify.com/artist/4TQ0jOKwGZFjmSnqR27MvF",
+          soundcloud: "https://soundcloud.com/itsraveyn",
+          apple: "https://music.apple.com/us/artist/raveyn/1851112747",
+        },
+      },
+      {
+        title: "thorns",
+        type: "Collabs",
+        year: "2026",
+        duration: "3:05",
+        tag: "Collab",
+        gradient: "from-pink-600/80 via-fuchsia-600/60 to-purple-700/80",
+        coverUrl: "",
+        links: {
+          spotify: "https://open.spotify.com/artist/4TQ0jOKwGZFjmSnqR27MvF",
+          soundcloud: "https://soundcloud.com/itsraveyn",
+          apple: "https://music.apple.com/us/artist/raveyn/1851112747",
+        },
+      },
+      {
+        title: "Flashbacks",
+        type: "Singles",
+        year: "2025",
+        duration: "2:51",
+        tag: "Archive",
+        gradient: "from-indigo-600/80 via-purple-600/60 to-pink-500/80",
+        coverUrl: "",
+        links: {
+          spotify: "https://open.spotify.com/artist/4TQ0jOKwGZFjmSnqR27MvF",
+          soundcloud: "https://soundcloud.com/itsraveyn",
+          apple: "https://music.apple.com/us/artist/raveyn/1851112747",
+        },
+      },
+    ];
+
     let allUploads = [...RECENT_UPLOADS];
     let activeFilter = "All";
     let toastTimeout = null;
 
     /**
-     * Displays a sleek non-blocking toast notification.
+     * Displays a temporary toast message at the bottom of the screen.
      */
     function showToast(message) {
       const toast = document.getElementById("toast");
       if (!toast) return;
+
       toast.textContent = message;
       toast.classList.remove("opacity-0", "translate-y-3", "pointer-events-none");
       toast.classList.add("opacity-100", "translate-y-0");
 
-      clearTimeout(toastTimeout);
+      if (toastTimeout) clearTimeout(toastTimeout);
       toastTimeout = setTimeout(() => {
-        toast.classList.remove("opacity-100", "translate-y-0");
         toast.classList.add("opacity-0", "translate-y-3", "pointer-events-none");
+        toast.classList.remove("opacity-100", "translate-y-0");
       }, 2400);
     }
 
     /**
-     * Copies official artist hub URL using execCommand fallback for maximum compatibility.
+     * Copies the official artist hub URL to the clipboard using a hidden textarea
+     * for reliable cross-browser and iframe support.
      */
     function handleShareClick() {
       const shareUrl = "https://www.raveyns.com";
+      const tempInput = document.createElement("textarea");
+      tempInput.value = shareUrl;
+      tempInput.setAttribute("readonly", "");
+      tempInput.style.position = "fixed";
+      tempInput.style.opacity = "0";
+      document.body.appendChild(tempInput);
+      tempInput.select();
+
       try {
-        const tempInput = document.createElement("input");
-        tempInput.value = shareUrl;
-        document.body.appendChild(tempInput);
-        tempInput.select();
-        tempInput.setSelectionRange(0, 99999);
         document.execCommand("copy");
-        document.body.removeChild(tempInput);
-        showToast("Copied https://www.raveyns.com!");
+        showToast("Copied www.raveyns.com to clipboard!");
       } catch (err) {
-        showToast("Copy failed — copy https://www.raveyns.com from your browser bar.");
+        showToast("Unable to copy link automatically.");
+      } finally {
+        document.body.removeChild(tempInput);
       }
+    }
+
+    /**
+     * Renders the artist profile photo if ARTIST_AVATAR_URL is configured,
+     * falling back cleanly to the default "rv" emblem if empty or broken.
+     */
+    function renderArtistAvatar() {
+      const container = document.getElementById("artistAvatarContainer");
+      if (!container || !ARTIST_AVATAR_URL) return;
+
+      const img = new Image();
+      img.alt = "raveyn profile photo";
+      img.className = "w-full h-full object-cover";
+      img.onload = () => {
+        container.innerHTML = "";
+        container.appendChild(img);
+      };
+      img.src = ARTIST_AVATAR_URL;
     }
 
     /**
@@ -711,6 +732,7 @@
         const shareBtn = document.getElementById("shareBtn");
         if (shareBtn) shareBtn.addEventListener("click", handleShareClick);
 
+        renderArtistAvatar();
         renderMusicPlatforms();
         renderSocials();
         renderUploadFilters();
